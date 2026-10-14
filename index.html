@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111111">
+<title>BOK PED | مركز الرسائل</title>
+
+<style>
+:root {
+  --red: #c51f32;
+  --dark: #111111;
+  --bg: #f4f5f7;
+  --border: #e7e8ec;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Tahoma, Arial, sans-serif;
+  background: var(--bg);
+  color: #171717;
+}
+
+header {
+  background: var(--dark);
+  color: white;
+  padding: 20px;
+  border-bottom: 3px solid var(--red);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo {
+  width: 48px;
+  height: 48px;
+  background: var(--red);
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  font-size: 18px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 19px;
+}
+
+header p {
+  margin: 5px 0 0;
+  color: #bbb;
+  font-size: 12px;
+}
+
+main {
+  width: min(1050px, 92%);
+  margin: 35px auto;
+}
+
+.hero {
+  margin-bottom: 25px;
+}
+
+.hero span {
+  color: var(--red);
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.hero h2 {
+  margin: 10px 0;
+  font-size: 30px;
+}
+
+.hero p {
+  color: #777;
+  line-height: 1.8;
+}
+
+.card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 12px 35px #00000008;
+  margin-bottom: 20px;
+}
+
+.card h3 {
+  margin-top: 0;
+}
+
+label {
+  display: block;
+  margin: 17px 0 8px;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #dddfe5;
+  border-radius: 12px;
+  font: inherit;
+  outline: none;
+  background: #fcfcfd;
+}
+
+input:focus,
+textarea:focus {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px #c51f3212;
+}
+
+textarea {
+  min-height: 140px;
+  resize: vertical;
+  line-height: 1.8;
+}
+
+button {
+  border: 0;
+  border-radius: 12px;
+  padding: 13px 18px;
+  font: inherit;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: .55;
+  cursor: wait;
+}
+
+.primary {
+  width: 100%;
+  margin-top: 20px;
+  background: var(--red);
+  color: white;
+}
+
+.primary:hover {
+  background: #a81729;
+}
+
+.secondary {
+  background: #eee;
+  color: #222;
+}
+
+.delete {
+  background: #fff0f1;
+  color: var(--red);
+  padding: 9px 12px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.notice {
+  display: none;
+  padding: 13px;
+  margin-top: 14px;
+  border-radius: 10px;
+  line-height: 1.7;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.notice.show {
+  display: block;
+}
+
+.error {
+  background: #fff0f1;
+  color: #9f1727;
+}
+
+.success {
+  background: #e8f8ef;
+  color: #17643d;
+}
+
+.message {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 15px;
+  margin-bottom: 12px;
+}
+
+.message h4 {
+  margin: 0 0 10px;
+  overflow-wrap: anywhere;
+}
+
+.message p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.8;
+  color: #555;
+}
+
+.date {
+  font-size: 11px;
+  color: #888;
+  margin-top: 12px;
+}
+
+.message-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.empty {
+  padding: 25px 10px;
+  text-align: center;
+  color: #888;
+  border: 1px dashed #ddd;
+  border-radius: 12px;
+  line-height: 1.8;
+}
+
+.footer {
+  text-align: center;
+  padding: 25px;
+  color: #888;
+  font-size: 11px;
+}
+
+@media(max-width:700px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h2 {
+    font-size: 25px;
+  }
+
+  .card {
+    padding: 18px;
+  }
+
+  main {
+    margin-top: 25px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">BOK</div>
+  <div>
+    <h1>BOK PED</h1>
+    <p>MESSAGE CENTER · مركز الرسائل</p>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <span>BOK PED / ADMIN</span>
+    <h2>إدارة رسائل التطبيق</h2>
+    <p>أرسل التنبيهات والرسائل التي تظهر لمستخدمي تطبيق BOK.</p>
+  </section>
+
+  <!-- تسجيل الدخول -->
+  <section class="card" id="loginSection">
+
+    <h3>تسجيل دخول المشرف</h3>
+
+    <form id="loginForm">
+
+      <label for="email">البريد الإلكتروني</label>
+      <input
+        id="email"
+        type="email"
+        required
+        autocomplete="username"
+        placeholder="البريد الإلكتروني للمشرف">
+
+      <label for="password">كلمة المرور</label>
+      <input
+        id="password"
+        type="password"
+        required
+        autocomplete="current-password"
+        placeholder="كلمة المرور">
+
+      <button class="primary" id="loginBtn" type="submit">
+        تسجيل الدخول
+      </button>
+
+    </form>
+
+    <div id="loginNotice" class="notice"></div>
+
+  </section>
+
+  <!-- لوحة التحكم -->
+  <section id="dashboard" class="hidden">
+
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:20px">
+      <span id="adminLabel" style="font-size:12px;color:#777"></span>
+      <button class="secondary" id="logoutBtn" type="button">
+        تسجيل الخروج
+      </button>
+    </div>
+
+    <div class="grid">
+
+      <!-- إرسال رسالة -->
+      <section class="card">
+
+        <h3>رسالة جديدة</h3>
+
+        <form id="messageForm">
+
+          <label for="title">عنوان الرسالة</label>
+          <input
+            id="title"
+            maxlength="255"
+            required
+            placeholder="مثال: تنبيه مهم">
+
+          <label for="messageText">محتوى الرسالة</label>
+          <textarea
+            id="messageText"
+            required
+            placeholder="اكتب الرسالة هنا..."></textarea>
+
+          <button class="primary" id="sendBtn" type="submit">
+            إرسال الرسالة
+          </button>
+
+        </form>
+
+        <div id="sendNotice" class="notice"></div>
+
+      </section>
+
+      <!-- الرسائل السابقة -->
+      <section class="card">
+
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+          <h3>الرسائل السابقة</h3>
+          <span id="count" style="font-size:12px;color:#777">
+            0 رسالة
+          </span>
+        </div>
+
+        <div id="messageList">
+          <div class="empty">سجّل الدخول لعرض الرسائل.</div>
+        </div>
+
+        <div id="listNotice" class="notice"></div>
+
+      </section>
+
+    </div>
+  </section>
+
+</main>
+
+<div class="footer">
+  BOK PED · MESSAGE MANAGEMENT
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+<script>
+
+// ============================================
+// إعدادات Firebase الحقيقية لمشروع BOK-PED
+// ============================================
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDnvmRTgZl1p325V3TmCjIH-PnPfjJPPpk",
+  authDomain: "bok-ped.firebaseapp.com",
+  databaseURL: "https://bok-ped-default-rtdb.firebaseio.com",
+  projectId: "bok-ped",
+  storageBucket: "bok-ped.firebasestorage.app",
+  messagingSenderId: "812838230843",
+  appId: "1:812838230843:web:f3bd5f59343db42b52b51e",
+  measurementId: "G-26SMZR0QCC"
+};
+
+// UID المشرف المعتمد في قواعد Firebase
+const ADMIN_UID = "zuwXPgS4TPYF5GyAYEPEOrsYV0z1";
+
+// تهيئة Firebase
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.database();
+
+const messagesRef = db.ref("messages");
+
+const $ = function(id) {
+  return document.getElementById(id);
+};
+
+let messagesListener = null;
+
+// ============================================
+// التنبيهات
+// ============================================
+
+function notice(id, text, type) {
+  const el = $(id);
+  el.textContent = text;
+  el.className = "notice show " + type;
+}
+
+function clearNotice(id) {
+  $(id).textContent = "";
+  $(id).className = "notice";
+}
+
+// ============================================
+// تسجيل الدخول
+// ============================================
+
+$("loginForm").addEventListener("submit", async function(e) {
+
+  e.preventDefault();
+
+  clearNotice("loginNotice");
+
+  $("loginBtn").disabled = true;
+
+  try {
+
+    await auth.signInWithEmailAndPassword(
+      $("email").value.trim(),
+      $("password").value
+    );
+
+  } catch(error) {
+
+    notice(
+      "loginNotice",
+      friendlyError(error),
+      "error"
+    );
+
+  } finally {
+
+    $("loginBtn").disabled = false;
+
+  }
+
+});
+
+// ============================================
+// تسجيل الخروج
+// ============================================
+
+$("logoutBtn").addEventListener("click", function() {
+  auth.signOut();
+});
+
+// ============================================
+// التحقق من صلاحية المشرف
+// ============================================
+
+auth.onAuthStateChanged(async function(user) {
+
+  stopListening();
+
+  clearNotice("listNotice");
+
+  if (!user) {
+
+    $("loginSection").classList.remove("hidden");
+    $("dashboard").classList.add("hidden");
+
+    return;
+  }
+
+  if (user.uid !== ADMIN_UID) {
+
+    await auth.signOut();
+
+    $("loginSection").classList.remove("hidden");
+    $("dashboard").classList.add("hidden");
+
+    notice(
+      "loginNotice",
+      "هذا الحساب ليس حساب المشرف المعتمد.",
+      "error"
+    );
+
+    return;
+  }
+
+  $("loginSection").classList.add("hidden");
+  $("dashboard").classList.remove("hidden");
+
+  $("adminLabel").textContent =
+    "المشرف: " + (user.email || user.uid);
+
+  startListening();
+
+});
+
+// ============================================
+// إرسال رسالة إلى BOK_PED/messages
+// ============================================
+
+$("messageForm").addEventListener("submit", async function(e) {
+
+  e.preventDefault();
+
+  clearNotice("sendNotice");
+
+  const user = auth.currentUser;
+
+  if (!user || user.uid !== ADMIN_UID) {
+
+    notice(
+      "sendNotice",
+      "يجب تسجيل الدخول بحساب المشرف المعتمد.",
+      "error"
+    );
+
+    return;
+  }
+
+  const title = $("title").value.trim();
+  const message = $("messageText").value.trim();
+
+  if (!title || !message) {
+
+    notice(
+      "sendNotice",
+      "اكتب عنوان الرسالة ومحتواها أولاً.",
+      "error"
+    );
+
+    return;
+  }
+
+  $("sendBtn").disabled = true;
+
+  try {
+
+    const newMessage = messagesRef.push();
+
+    await newMessage.set({
+      title: title,
+      message: message,
+      createdAt: firebase.database.ServerValue.TIMESTAMP,
+      type: "announcement"
+    });
+
+    $("messageForm").reset();
+
+    notice(
+      "sendNotice",
+      "تم إرسال الرسالة بنجاح.",
+      "success"
+    );
+
+  } catch(error) {
+
+    notice(
+      "sendNotice",
+      friendlyError(error),
+      "error"
+    );
+
+  } finally {
+
+    $("sendBtn").disabled = false;
+
+  }
+
+});
+
+// ============================================
+// تحميل الرسائل والتحقق من تسجيل الدخول
+// ============================================
+
+function startListening() {
+
+  messagesListener = function(snapshot) {
+    renderMessages(snapshot);
+  };
+
+  messagesRef
+    .orderByChild("createdAt")
+    .limitToLast(100)
+    .on(
+      "value",
+      messagesListener,
+      function(error) {
+        notice(
+          "listNotice",
+          friendlyError(error),
+          "error"
+        );
+      }
+    );
+
+}
+
+function stopListening() {
+
+  if (messagesListener) {
+
+    messagesRef
+      .orderByChild("createdAt")
+      .limitToLast(100)
+      .off("value", messagesListener);
+
+    messagesListener = null;
+
+  }
+
+}
+
+// ============================================
+// عرض الرسائل
+// ============================================
+
+function renderMessages(snapshot) {
+
+  const list = $("messageList");
+  const items = [];
+
+  snapshot.forEach(function(child) {
+
+    items.push({
+      id: child.key,
+      ...child.val()
+    });
+
+  });
+
+  items.reverse();
+
+  $("count").textContent = items.length + " رسالة";
+
+  list.replaceChildren();
+
+  if (items.length === 0) {
+
+    const empty = document.createElement("div");
+
+    empty.className = "empty";
+    empty.textContent = "لا توجد رسائل حتى الآن.";
+
+    list.appendChild(empty);
+
+    return;
+  }
+
+  items.forEach(function(item) {
+
+    const card = document.createElement("article");
+    card.className = "message";
+
+    const head = document.createElement("div");
+    head.className = "message-head";
+
+    const content = document.createElement("div");
+    content.style.minWidth = "0";
+
+    const title = document.createElement("h4");
+    title.textContent = item.title || "رسالة بدون عنوان";
+
+    const body = document.createElement("p");
+    body.textContent = item.message || "";
+
+    const date = document.createElement("div");
+    date.className = "date";
+
+    if (item.createdAt) {
+
+      date.textContent = new Date(item.createdAt)
+        .toLocaleString("ar");
+
+    } else {
+
+      date.textContent = "وقت الإرسال غير محدد";
+
+    }
+
+    content.append(title, body, date);
+
+    const del = document.createElement("button");
+
+    del.className = "delete";
+    del.type = "button";
+    del.textContent = "حذف";
+
+    del.addEventListener("click", async function() {
+
+      if (!confirm("هل تريد حذف هذه الرسالة؟")) {
+        return;
+      }
+
+      del.disabled = true;
+
+      try {
+
+        await messagesRef.child(item.id).remove();
+
+      } catch(error) {
+
+        notice(
+          "listNotice",
+          friendlyError(error),
+          "error"
+        );
+
+      } finally {
+
+        del.disabled = false;
+
+      }
+
+    });
+
+    head.append(content, del);
+
+    card.appendChild(head);
+    list.appendChild(card);
+
+  });
+
+}
+
+// ============================================
+// معالجة أخطاء Firebase
+// ============================================
+
+function friendlyError(error) {
+
+  const code = error && error.code ? error.code : "";
+
+  if (
+    code.includes("invalid-credential") ||
+    code.includes("wrong-password") ||
+    code.includes("user-not-found")
+  ) {
+
+    return "بيانات الدخول غير صحيحة.";
+
+  }
+
+  if (code.includes("unauthorized-domain")) {
+
+    return "أضف نطاق الموقع إلى Authorized domains في Firebase Authentication.";
+
+  }
+
+  if (code.includes("permission-denied")) {
+
+    return "تم رفض العملية. تحقق من UID المشرف وقواعد Firebase.";
+
+  }
+
+  if (code.includes("invalid-api-key")) {
+
+    return "مفتاح Firebase API غير صحيح.";
+
+  }
+
+  return error && error.message
+    ? error.message
+    : "حدث خطأ. تحقق من اتصال الإنترنت وإعدادات Firebase.";
+
+}
+
+</script>
+
+</body>
+</html>
