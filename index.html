@@ -45,6 +45,7 @@ header {
   place-items: center;
   font-weight: 900;
   font-size: 18px;
+  flex-shrink: 0;
 }
 
 header h1 {
@@ -91,6 +92,7 @@ main {
   padding: 24px;
   box-shadow: 0 12px 35px #00000008;
   margin-bottom: 20px;
+  min-width: 0;
 }
 
 .card h3 {
@@ -161,6 +163,7 @@ button:disabled {
   background: #fff0f1;
   color: var(--red);
   padding: 9px 12px;
+  flex-shrink: 0;
 }
 
 .grid {
@@ -227,6 +230,11 @@ button:disabled {
   justify-content: space-between;
   align-items: flex-start;
   gap: 12px;
+}
+
+.message-content {
+  min-width: 0;
+  flex: 1;
 }
 
 .empty {
@@ -312,14 +320,14 @@ button:disabled {
 
     </form>
 
-    <div id="loginNotice" class="notice"></div>
+    <div id="loginNotice" class="notice" role="status"></div>
 
   </section>
 
   <!-- لوحة التحكم -->
   <section id="dashboard" class="hidden">
 
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:20px">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap">
       <span id="adminLabel" style="font-size:12px;color:#777"></span>
       <button class="secondary" id="logoutBtn" type="button">
         تسجيل الخروج
@@ -345,6 +353,7 @@ button:disabled {
           <label for="messageText">محتوى الرسالة</label>
           <textarea
             id="messageText"
+            maxlength="10000"
             required
             placeholder="اكتب الرسالة هنا..."></textarea>
 
@@ -354,7 +363,7 @@ button:disabled {
 
         </form>
 
-        <div id="sendNotice" class="notice"></div>
+        <div id="sendNotice" class="notice" role="status"></div>
 
       </section>
 
@@ -372,7 +381,7 @@ button:disabled {
           <div class="empty">سجّل الدخول لعرض الرسائل.</div>
         </div>
 
-        <div id="listNotice" class="notice"></div>
+        <div id="listNotice" class="notice" role="status"></div>
 
       </section>
 
@@ -393,24 +402,27 @@ button:disabled {
 <script>
 
 // ============================================
-// إعدادات Firebase الحقيقية لمشروع BOK-PED
+// إعدادات Firebase الجديدة: BOK-PEDRO-NEW
 // ============================================
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDnvmRTgZl1p325V3TmCjIH-PnPfjJPPpk",
-  authDomain: "bok-ped.firebaseapp.com",
-  databaseURL: "https://bok-ped-default-rtdb.firebaseio.com",
-  projectId: "bok-ped",
-  storageBucket: "bok-ped.firebasestorage.app",
-  messagingSenderId: "812838230843",
-  appId: "1:812838230843:web:f3bd5f59343db42b52b51e",
-  measurementId: "G-26SMZR0QCC"
+  apiKey: "AIzaSyCRUpWEIvw927UEIjdl_G7ecdgZ_V-oDpo",
+  authDomain: "bok-pedro-new.firebaseapp.com",
+  databaseURL: "https://bok-pedro-new-default-rtdb.firebaseio.com",
+  projectId: "bok-pedro-new",
+  storageBucket: "bok-pedro-new.firebasestorage.app",
+  messagingSenderId: "79997674431",
+  appId: "1:79997674431:web:92c4b0db8d8d5d3863370a",
+  measurementId: "G-HJ3PYMKG5X"
 };
 
-// UID المشرف المعتمد في قواعد Firebase
-const ADMIN_UID = "zuwXPgS4TPYF5GyAYEPEOrsYV0z1";
+// UID المشرف المعتمد في المشروع الجديد
+const ADMIN_UID = "gL1GGUJ7FWS4zRZmzdaf60qqHMD3";
 
+// ============================================
 // تهيئة Firebase
+// ============================================
+
 firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
@@ -423,9 +435,11 @@ const $ = function(id) {
 };
 
 let messagesListener = null;
+let currentMessagesQuery = null;
+let authCheckVersion = 0;
 
 // ============================================
-// التنبيهات
+// عرض التنبيهات
 // ============================================
 
 function notice(id, text, type) {
@@ -437,6 +451,53 @@ function notice(id, text, type) {
 function clearNotice(id) {
   $(id).textContent = "";
   $(id).className = "notice";
+}
+
+// ============================================
+// معالجة أخطاء Firebase
+// ============================================
+
+function friendlyError(error) {
+
+  const code = error && error.code ? error.code : "";
+
+  if (
+    code.includes("invalid-credential") ||
+    code.includes("wrong-password") ||
+    code.includes("user-not-found") ||
+    code.includes("invalid-login-credentials")
+  ) {
+    return "بيانات الدخول غير صحيحة.";
+  }
+
+  if (code.includes("too-many-requests")) {
+    return "محاولات كثيرة. انتظر قليلاً ثم حاول مرة أخرى.";
+  }
+
+  if (code.includes("unauthorized-domain")) {
+    return "أضف نطاق الموقع إلى Authorized domains في Firebase Authentication.";
+  }
+
+  if (
+    code.includes("permission-denied") ||
+    code.includes("PERMISSION_DENIED")
+  ) {
+    return "تم رفض العملية. تحقق من قواعد Firebase وصلاحيات المشرف.";
+  }
+
+  if (code.includes("invalid-api-key")) {
+    return "مفتاح Firebase API غير صحيح.";
+  }
+
+  if (code.includes("network-request-failed")) {
+    return "تعذر الاتصال بالإنترنت. تحقق من الاتصال ثم حاول مجدداً.";
+  }
+
+  if (error && error.message) {
+    return error.message;
+  }
+
+  return "حدث خطأ. تحقق من اتصال الإنترنت وإعدادات Firebase.";
 }
 
 // ============================================
@@ -478,31 +539,68 @@ $("loginForm").addEventListener("submit", async function(e) {
 // تسجيل الخروج
 // ============================================
 
-$("logoutBtn").addEventListener("click", function() {
-  auth.signOut();
+$("logoutBtn").addEventListener("click", async function() {
+
+  $("logoutBtn").disabled = true;
+
+  try {
+
+    await auth.signOut();
+
+  } catch(error) {
+
+    notice(
+      "listNotice",
+      friendlyError(error),
+      "error"
+    );
+
+  } finally {
+
+    $("logoutBtn").disabled = false;
+
+  }
+
 });
 
 // ============================================
-// التحقق من صلاحية المشرف
+// التحقق من حساب المشرف
 // ============================================
 
 auth.onAuthStateChanged(async function(user) {
 
+  const version = ++authCheckVersion;
+
   stopListening();
 
   clearNotice("listNotice");
+  clearNotice("sendNotice");
 
   if (!user) {
 
     $("loginSection").classList.remove("hidden");
     $("dashboard").classList.add("hidden");
 
+    $("adminLabel").textContent = "";
+    $("messageList").replaceChildren();
+
+    const empty = document.createElement("div");
+    empty.className = "empty";
+    empty.textContent = "سجّل الدخول لعرض الرسائل.";
+
+    $("messageList").appendChild(empty);
+    $("count").textContent = "0 رسالة";
+
     return;
   }
 
   if (user.uid !== ADMIN_UID) {
 
-    await auth.signOut();
+    try {
+      await auth.signOut();
+    } catch(ignore) {}
+
+    if (version !== authCheckVersion) return;
 
     $("loginSection").classList.remove("hidden");
     $("dashboard").classList.add("hidden");
@@ -527,7 +625,7 @@ auth.onAuthStateChanged(async function(user) {
 });
 
 // ============================================
-// إرسال رسالة إلى BOK_PED/messages
+// إرسال رسالة إلى messages
 // ============================================
 
 $("messageForm").addEventListener("submit", async function(e) {
@@ -563,9 +661,27 @@ $("messageForm").addEventListener("submit", async function(e) {
     return;
   }
 
+  if (title.length > 255 || message.length > 10000) {
+
+    notice(
+      "sendNotice",
+      "العنوان أو محتوى الرسالة أطول من المسموح.",
+      "error"
+    );
+
+    return;
+  }
+
   $("sendBtn").disabled = true;
 
   try {
+
+    // إعادة التحقق من هوية المشرف
+    const freshUser = auth.currentUser;
+
+    if (!freshUser || freshUser.uid !== ADMIN_UID) {
+      throw new Error("انتهت صلاحية تسجيل دخول المشرف.");
+    }
 
     const newMessage = messagesRef.push();
 
@@ -601,49 +717,56 @@ $("messageForm").addEventListener("submit", async function(e) {
 });
 
 // ============================================
-// تحميل الرسائل والتحقق من تسجيل الدخول
+// الاستماع إلى آخر 100 رسالة
 // ============================================
 
 function startListening() {
+
+  stopListening();
+
+  currentMessagesQuery = messagesRef
+    .orderByChild("createdAt")
+    .limitToLast(100);
 
   messagesListener = function(snapshot) {
     renderMessages(snapshot);
   };
 
-  messagesRef
-    .orderByChild("createdAt")
-    .limitToLast(100)
-    .on(
-      "value",
-      messagesListener,
-      function(error) {
-        notice(
-          "listNotice",
-          friendlyError(error),
-          "error"
-        );
-      }
-    );
+  currentMessagesQuery.on(
+    "value",
+    messagesListener,
+    function(error) {
 
-}
+      notice(
+        "listNotice",
+        friendlyError(error),
+        "error"
+      );
 
-function stopListening() {
-
-  if (messagesListener) {
-
-    messagesRef
-      .orderByChild("createdAt")
-      .limitToLast(100)
-      .off("value", messagesListener);
-
-    messagesListener = null;
-
-  }
+    }
+  );
 
 }
 
 // ============================================
-// عرض الرسائل
+// إيقاف الاستماع عند تسجيل الخروج
+// ============================================
+
+function stopListening() {
+
+  if (currentMessagesQuery && messagesListener) {
+
+    currentMessagesQuery.off("value", messagesListener);
+
+  }
+
+  currentMessagesQuery = null;
+  messagesListener = null;
+
+}
+
+// ============================================
+// عرض الرسائل بأمان
 // ============================================
 
 function renderMessages(snapshot) {
@@ -653,9 +776,13 @@ function renderMessages(snapshot) {
 
   snapshot.forEach(function(child) {
 
+    const value = child.val() || {};
+
     items.push({
       id: child.key,
-      ...child.val()
+      title: typeof value.title === "string" ? value.title : "",
+      message: typeof value.message === "string" ? value.message : "",
+      createdAt: value.createdAt || null
     });
 
   });
@@ -687,21 +814,26 @@ function renderMessages(snapshot) {
     head.className = "message-head";
 
     const content = document.createElement("div");
-    content.style.minWidth = "0";
+    content.className = "message-content";
 
     const title = document.createElement("h4");
     title.textContent = item.title || "رسالة بدون عنوان";
 
     const body = document.createElement("p");
-    body.textContent = item.message || "";
+    body.textContent = item.message;
 
     const date = document.createElement("div");
     date.className = "date";
 
     if (item.createdAt) {
 
-      date.textContent = new Date(item.createdAt)
-        .toLocaleString("ar");
+      const dateValue = Number(item.createdAt);
+
+      if (Number.isFinite(dateValue) && dateValue > 0) {
+        date.textContent = new Date(dateValue).toLocaleString("ar");
+      } else {
+        date.textContent = "وقت الإرسال غير محدد";
+      }
 
     } else {
 
@@ -709,7 +841,9 @@ function renderMessages(snapshot) {
 
     }
 
-    content.append(title, body, date);
+    content.appendChild(title);
+    content.appendChild(body);
+    content.appendChild(date);
 
     const del = document.createElement("button");
 
@@ -719,7 +853,20 @@ function renderMessages(snapshot) {
 
     del.addEventListener("click", async function() {
 
-      if (!confirm("هل تريد حذف هذه الرسالة؟")) {
+      const user = auth.currentUser;
+
+      if (!user || user.uid !== ADMIN_UID) {
+
+        notice(
+          "listNotice",
+          "يجب تسجيل الدخول بحساب المشرف.",
+          "error"
+        );
+
+        return;
+      }
+
+      if (!confirm("هل تريد حذف هذه الرسالة نهائياً؟")) {
         return;
       }
 
@@ -728,6 +875,12 @@ function renderMessages(snapshot) {
       try {
 
         await messagesRef.child(item.id).remove();
+
+        notice(
+          "listNotice",
+          "تم حذف الرسالة.",
+          "success"
+        );
 
       } catch(error) {
 
@@ -745,7 +898,8 @@ function renderMessages(snapshot) {
 
     });
 
-    head.append(content, del);
+    head.appendChild(content);
+    head.appendChild(del);
 
     card.appendChild(head);
     list.appendChild(card);
@@ -755,46 +909,22 @@ function renderMessages(snapshot) {
 }
 
 // ============================================
-// معالجة أخطاء Firebase
+// مراقبة أخطاء الاتصال
 // ============================================
 
-function friendlyError(error) {
+window.addEventListener("online", function() {
+  clearNotice("listNotice");
+});
 
-  const code = error && error.code ? error.code : "";
+window.addEventListener("offline", function() {
 
-  if (
-    code.includes("invalid-credential") ||
-    code.includes("wrong-password") ||
-    code.includes("user-not-found")
-  ) {
+  notice(
+    "listNotice",
+    "الاتصال بالإنترنت غير متوفر حالياً.",
+    "error"
+  );
 
-    return "بيانات الدخول غير صحيحة.";
-
-  }
-
-  if (code.includes("unauthorized-domain")) {
-
-    return "أضف نطاق الموقع إلى Authorized domains في Firebase Authentication.";
-
-  }
-
-  if (code.includes("permission-denied")) {
-
-    return "تم رفض العملية. تحقق من UID المشرف وقواعد Firebase.";
-
-  }
-
-  if (code.includes("invalid-api-key")) {
-
-    return "مفتاح Firebase API غير صحيح.";
-
-  }
-
-  return error && error.message
-    ? error.message
-    : "حدث خطأ. تحقق من اتصال الإنترنت وإعدادات Firebase.";
-
-}
+});
 
 </script>
 
